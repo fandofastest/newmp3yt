@@ -1,4 +1,4 @@
-package com.flat.free.musicapp;
+package com.music.free.musicapp;
 
 import android.app.Activity;
 import android.os.Bundle;

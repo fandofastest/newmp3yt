@@ -1,4 +1,4 @@
-package com.flat.free.musicapp;
+package com.music.free.musicapp;
 
 import android.Manifest;
 import android.graphics.Typeface;

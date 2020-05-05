@@ -23,9 +23,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.krossovochkin.bottomsheetmenu.BottomSheetMenu;
-import com.flat.free.musicapp.Constants;
-import com.flat.free.musicapp.PlayerActivity;
-import com.flat.free.musicapp.R;
+import com.music.free.musicapp.Constants;
+import com.music.free.musicapp.PlayerActivity;
+import com.music.free.musicapp.R;
 
 import java.util.List;
 

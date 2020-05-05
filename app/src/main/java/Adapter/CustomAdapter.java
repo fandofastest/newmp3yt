@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.flat.free.musicapp.R;
+import com.music.free.musicapp.R;
 
 import java.util.List;
 

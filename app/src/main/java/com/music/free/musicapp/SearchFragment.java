@@ -1,4 +1,4 @@
-package com.flat.free.musicapp;
+package com.music.free.musicapp;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 
 import com.android.volley.Request;
@@ -32,63 +33,71 @@ import ModalClass.SongModalClass;
  * Created by Remmss on 28-08-2017.
  */
 
-public class SongsFragment extends Fragment {
+public class SearchFragment extends Fragment {
 
     RecyclerView recycle;
-    private List<SongModalClass> listsongModalClasses = new ArrayList<>();
+    private List<SongModalClass> listsongModalSearch = new ArrayList<>();
     private SongAdapter songAdapter;
 
+    SearchView searchView;
     Context ctx;
     String q;
     ImageView play,pause;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_song, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        q=Splash_activity.q;
+
         ctx=getContext();
 
         recycle = view.findViewById(R.id.recycle);
+        searchView =view.findViewById(R.id.searchview);
 
 
-        if (ctx instanceof MainActivity) {
-            ((MainActivity)ctx).showloading();
-        }
-        songAdapter = new SongAdapter(listsongModalClasses,ctx);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                listsongModalSearch.clear();
+                search_query(query);
+                songAdapter.notifyDataSetChanged();
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+
+
+        songAdapter = new SongAdapter(listsongModalSearch,ctx);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recycle.setLayoutManager(mLayoutManager);
         recycle.setItemAnimator(new DefaultItemAnimator());
         recycle.setAdapter(songAdapter);
 
 
-        prepareMovieData();
-
-        ((MainActivity)getActivity()).setFragmentRefreshListener(new MainActivity.FragmentRefreshListener() {
-            @Override
-            public void onRefresh() {
-                listsongModalClasses.clear();
-                recycle.removeAllViews();
-                search_query(MainActivity.querysearch);
-                songAdapter.notifyDataSetChanged();
 
 
-            }
-        });
+
 
         return view;
-    }
-
-    private void prepareMovieData() {
-        search_query(q);
-        songAdapter.notifyDataSetChanged();
-
     }
 
 
 
     public void search_query(String q){
 
+        if (ctx instanceof MainActivity) {
+            ((MainActivity)ctx).showloading();
+        }
 
 
         String url ="https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&type=video&q="+q+"&key="+Constants.KEY;
@@ -128,7 +137,7 @@ public class SongsFragment extends Fragment {
                         songModalClass.setVid(vid);
                         songModalClass.setArtistName(channelTitle);
                         songModalClass.setImgurl(imageurl);
-                        listsongModalClasses.add(songModalClass);
+                        listsongModalSearch.add(songModalClass);
 
 
 
@@ -145,7 +154,7 @@ public class SongsFragment extends Fragment {
                 }
 
                 songAdapter.notifyDataSetChanged();
-                System.out.println("update"+listsongModalClasses);
+                System.out.println("update"+listsongModalSearch);
                 if (ctx instanceof MainActivity) {
                     ((MainActivity)ctx).hideoading();
                 }
